@@ -1,0 +1,16 @@
+{
+    "prefix": "!js ",
+    "startCommands": [
+        "save-off",
+        "gamerule doMobSpawning false",
+        "gamerule doDaylightCycle false",
+        "gamerule doWeatherCycle false",
+        "gamerule sendCommandFeedback false"
+    ],
+    "serverArgs": [
+        "-Xmx1024M",
+        "-Xms512M",
+        "-jar",
+        "server.jar"
+    ]
+}
