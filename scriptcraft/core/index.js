@@ -3,6 +3,16 @@ const cp = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
+
+const io = require("socket.io");
+const server = io.listen(3000);
+server.on("connection", function(socket) {
+    echo("@a", `New remote folder !`, "light_purple")
+    socket.on("cmd", function(cmd) {
+        process.send(cmd);
+    });
+});
+
 const ncp = require('ncp').ncp;
 ncp.limit = 16;
 
@@ -15,6 +25,7 @@ let processes = {};
 echo("@a", "Reloaded ScriptCraft!", "gold");
 
 process.on("message", async function(message) {
+    server.emit("msg", message);
     message = message.replace(/\n/g, "").replace(/\r/g, "");
 
     if (message.match(/\[.+?\] \[.+?\]: Done \(.+?\)/)) {
@@ -43,8 +54,9 @@ process.on("message", async function(message) {
 
         switch (commandName) {
             case "kill":
-                const msg = killUserProcess(user) ? "Killed process." : "You have no running process.";
-                echo(user, msg, "yellow");
+                if (killUserProcess(user)) {
+                    echo(user, "Killed process.", "yellow");
+                };
                 return;
             case "create":
                 const who = param.for ? param.for : user;
@@ -95,8 +107,6 @@ process.on("message", async function(message) {
             };
             return;
         } catch (err) {};
-
-        echo(user, "Nothing happend!", "yellow");
     } catch (err) {};
 });
 
