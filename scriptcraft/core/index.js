@@ -68,30 +68,22 @@ process.on("message", async function(message) {
                 break;
         };
 
-        try {
-            let scriptPath = path.join(__dirname, `../user/${folderName}/${commandName}/index.js`);
-            await stat(scriptPath);
-            spawnUserProcess(user, scriptPath, {
+        if (await spawnUserProcess(user, path.join(__dirname, `../user/${folderName}/${commandName}/index.js`), {
                 user: user,
                 command: command,
                 args: args
-            });
+            })) {
             echo(user, `Executing ${command} in ${folderName}`, "yellow");
             return;
-        } catch (err) {};
+        };
 
-        try {
-            let scriptPath = path.join(__dirname, `../global/${commandName}/index.js`);
-            await stat(scriptPath);
-            console.log(command)
-            spawnUserProcess(user, scriptPath, {
+        if (await spawnUserProcess(user, path.join(__dirname, `../global/${commandName}/index.js`), {
                 user: user,
                 command: command,
                 args: args
-            });
+            })) {
+            echo(user, `Executing ${command}`, "yellow");
             return;
-        } catch (err) {
-            console.log(err)
         };
 
         try {
@@ -130,7 +122,13 @@ function getExecutionParam(command) {
     return ret;
 };
 
-function spawnUserProcess(user, path, args) {
+async function spawnUserProcess(user, path, args) {
+    try {
+        await stat(path);
+    } catch (err) {
+        return false;
+    };
+
     if (processes[user]) {
         processes[user].kill("SIGINT");
     };
@@ -157,6 +155,9 @@ function spawnUserProcess(user, path, args) {
             echo(user, data[i], "blue");
         };
     });
+
+    echo(user, `Executing ${command} in ${folderName}`, "yellow");
+    return true;
 };
 
 function killUserProcess(user) {
