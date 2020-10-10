@@ -45,7 +45,7 @@ process.on("message", async function(message) {
             case "kill":
                 const msg = killUserProcess(user) ? "Killed process." : "You have no running process.";
                 echo(user, msg, "yellow");
-                break;
+                return;
             case "create":
                 const who = param.for ? param.for : user;
                 const version = param.v ? param.v : "1.16.3";
@@ -65,7 +65,7 @@ process.on("message", async function(message) {
                         echo(user, `Created new script folder "./${who}/${name}/"`, "green");
                     });
                 };
-                break;
+                return;
         };
 
         if (await spawnUserProcess(user, path.join(__dirname, `../user/${folderName}/${commandName}/index.js`), {
