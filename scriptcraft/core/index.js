@@ -103,7 +103,7 @@ process.on("message", async function(message) {
 
             const len = data.length;
             for (let i = 0; i < len; i++) {
-                echo(user, data[i], yellow);
+                echo(user, data[i], "yellow");
             };
             return;
         } catch (err) {};
