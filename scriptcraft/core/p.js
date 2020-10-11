@@ -1,3 +1,5 @@
+const p = require("../template/quickstart/p");
+
 let s = function(data) { process.send(data); };
 
 let dronename;
@@ -17,6 +19,12 @@ module.exports = {
         s(`execute at ${this.Drone.owner} run summon item_frame ~ ~ ~ {Facing:0b,Invulnerable:1b,Invisible:1b,CustomName:'{"text":"frame_${this.Drone.name}"}',Item:{}}`);
         s(`execute at @e[type=item_frame,name="frame_${this.Drone.name}"] run summon armor_stand ~ ~ ~ {NoGravity:1b,Invulnerable:1b,Small:0b,Invisible:1b,NoBasePlate:1b,Rotation:[0F,0F],ArmorItems:[{},{},{},{id:"minecraft:gold_block",Count:1b}],CustomName:"{\\"text\\":\\"drone_${this.Drone.name}\\"}"}`)
         s(`kill @e[type=item_frame,name="frame_${this.Drone.name}"]`);
+
+        this.arg = process.argv;
+        this.arg.shift();
+        this.arg.shift();
+        this.arg.shift();
+        this.arg.shift();
     },
     echo: function(txt, color) {
         if (color) {
