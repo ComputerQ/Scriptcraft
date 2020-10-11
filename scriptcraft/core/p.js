@@ -1,5 +1,3 @@
-const p = require("../template/quickstart/p");
-
 let s = function(data) { process.send(data); };
 
 let dronename;
@@ -27,10 +25,11 @@ module.exports = {
         this.arg.shift();
     },
     echo: function(txt, color) {
+        txt = txt.replace(/"/g, "\\\"").replace(/\\/g, "\\\\");
         if (color) {
-            s(`tellraw ${process.argv[2]} {"text":"${txt}","color":"${color}"}`);
+            s(`tellraw ${this.Drone.owner} {"text":"${txt}","color":"${color}"}`);
         } else {
-            s(`tellraw ${process.argv[2]} "${txt}"`);
+            s(`tellraw ${this.Drone.owner} "${txt}"`);
         };
         return this;
     },
