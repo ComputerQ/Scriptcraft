@@ -1,3 +1,5 @@
+process.chdir(__dirname);
+
 const config = require("../config.json");
 const cp = require("child_process");
 const fs = require("fs");
